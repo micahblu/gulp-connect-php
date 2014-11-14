@@ -30,31 +30,37 @@ module.exports = (function () {
 			}).on('error', function (err) {
 				// back off after 1s
 				if (++checkServerTries > 20) {
+					console.log('PHP server not started. Retrying...');
 					return cb();
 				}
-
-				console.log('PHP server not started. Retrying...');
 				checkServer(hostname, port, cb);
 			}).end();
 		}, 50);
 	}
 
+	function extend(obj /* , ...source */) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    for (var key in arguments[i]) {
+	      if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
+	         obj[key] = arguments[i][key];
+	         obj[key] = (typeof arguments[i][key] === 'object' && arguments[i][key] ? extend(obj[key], arguments[i][key]) : arguments[i][key]);
+	      }
+	    }
+	  }
+	  return obj;
+	}
 
 	var server = function (options){
-		var cb = function(){
-			console.log('anonymous cb triggered');
-		};
+		var cb = function(){};
 
-		if(!options){
-			options = {
-				port: 8000,
-				hostname: '127.0.0.1',
-				base: '.',
-				keepalive: false,
-				open: false,
-				bin: 'php'
-			};
-		}
+		options = extend({
+			port: 8000,
+			hostname: '127.0.0.1',
+			base: '.',
+			keepalive: true,
+			open: false,
+			bin: 'php'
+		}, options);
 
 		var host = options.hostname + ':' + options.port;
 		var args = ['-S', host];
@@ -67,28 +73,20 @@ module.exports = (function () {
 			args.push(options.router);
 		}
 
-
 		binVersionCheck(options.bin, '>=5.4', function (err) {
 			if (err) {
-				console.log(err);
 				cb();
 				return;
 			}
-
 			var cp = spawn(options.bin, args, {
 				cwd: options.base,
 				stdio: 'inherit'
 			});
 
-			// quit PHP when grunt is done
-			process.on('exit', function () {
-				cp.kill();
-			});
-
 			// check when the server is ready. tried doing it by listening
 			// to the child process `data` event, but it's not triggered...
 			checkServer(options.hostname, options.port, function () {
-				if (!this.flags.keepalive && !options.keepalive) {
+				if (!options.keepalive) {
 					cb();
 				}
 

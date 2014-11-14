@@ -20,5 +20,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/micahblu/gulp-php/issues"
+  },
+  "devDependencies": {
+    "bin-version-check": "^2.1.0",
+    "opn": "^1.0.0"
   }
 }
