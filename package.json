@@ -1,5 +1,5 @@
 {
-  "name": "gulp-php",
+  "name": "gulp-php-connect",
   "version": "0.0.1",
   "description": "Starts a php server",
   "main": "index.js",

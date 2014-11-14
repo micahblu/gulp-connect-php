@@ -1,4 +1,4 @@
-# gulp-php 
+# gulp-php-connect
 
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
@@ -9,14 +9,14 @@ Uses the built-in server in PHP 5.4.0+.
 ## Install
 
 ```sh
-$ npm install --save-dev gulp-php
+$ npm install --save-dev gulp-php-connect
 ```
 
 ## Usage
 
 ```js
 var gulp = require('gulp'),
-    connect = require('gulp-php');
+    connect = require('gulp-php-connect');
 
 gulp.task('connect', function() {
 	connect.server();
@@ -31,7 +31,7 @@ gulp.task('default', ['connect']);
 
 ```js
 var gulp = require('gulp'),
-    connect = require('gulp-php');
+    connect = require('gulp-php-connect');
 
 gulp.task('connect', function() {
 	connect.server();
