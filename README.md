@@ -1,4 +1,4 @@
-# gulp-php-connect
+# gulp-connect-php
 
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
@@ -9,14 +9,14 @@ Uses the built-in server in PHP 5.4.0+.
 ## Install
 
 ```sh
-$ npm install --save-dev gulp-php-connect
+$ npm install --save-dev gulp-connect-php
 ```
 
 ## Usage
 
 ```js
 var gulp = require('gulp'),
-    connect = require('gulp-php-connect');
+    connect = require('gulp-connect-php');
 
 gulp.task('connect', function() {
 	connect.server();
@@ -31,7 +31,7 @@ gulp.task('default', ['connect']);
 
 ```js
 var gulp = require('gulp'),
-    connect = require('gulp-php-connect');
+    connect = require('gulp-connect-php');
 
 gulp.task('connect', function() {
 	connect.server();
@@ -101,7 +101,7 @@ Example router script:
 if (preg_match('/\.(?:png|jpg|jpeg|gif)$/', $_SERVER["REQUEST_URI"])) {
 	return false;    // serve the requested resource as-is
 } else {
-	echo "<p>Thanks for using grunt-php :)</p>";
+	echo "<p>Thanks for using gulp-connect-php :)</p>";
 }
 ?>
 ```
