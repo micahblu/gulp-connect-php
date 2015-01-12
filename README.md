@@ -2,7 +2,7 @@
 
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
-This is pretty much a gulp version of [@sindresorhus's](https://github.com/sindresorhus) [grunt-php] (https://github.com/sindresorhus/grunt-php) and acts as a drop-in replacement for [gulp-connect](https://github.com/gruntjs/grunt-contrib-connect). Useful for running tests on PHP projects.
+This is pretty much a gulp version of [@sindresorhus's](https://github.com/sindresorhus) [grunt-php] (https://github.com/sindresorhus/grunt-php) and acts as a drop-in replacement for [gulp-connect](https://www.npmjs.com/package/gulp-connect). Useful for running tests on PHP projects.
 
 Uses the built-in server in PHP 5.4.0+.
 
