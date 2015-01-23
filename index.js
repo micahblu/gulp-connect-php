@@ -1,5 +1,6 @@
 'use strict';
 var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
 var http = require('http');
 var open = require('opn');
 var binVersionCheck = require('bin-version-check');
@@ -50,16 +51,42 @@ module.exports = (function () {
 	  return obj;
 	}
 
-	var server = function (options){
-		var cb = function(){};
+	var closeServer = function (cb) {
+		var child = exec('lsof -i :8000',
+		  function (error, stdout, stderr) {
+		    //console.log('stdout: ' + stdout);
+		    //console.log('stderr: ' + stderr);
+		    if (error !== null) {
+		      console.log('exec error: ' + error);
+		    }
 
+		    // get pid then kill it
+		    var pid = stdout.match(/php\s+?([0-9]+)/)[1];
+		    if (pid) {
+		    	exec('kill ' + pid, function (error, stdout, stderr) {
+		    		//console.log('stdout: ' + stdout);
+		   			//console.log('stderr: ' + stderr);
+		    		cb();
+		    	});
+		    } else {
+		    	cb({error: "couldn't find process id and kill it"});
+		    }
+		});
+	};
+
+	var server = function (options, cb){
+		if (!cb) {
+			cb = function(){};
+		}
+	
 		options = extend({
 			port: 8000,
 			hostname: '127.0.0.1',
 			base: '.',
-			keepalive: true,
+			keepalive: false,
 			open: false,
-			bin: 'php'
+			bin: 'php',
+			root: '/'
 		}, options);
 
 		var host = options.hostname + ':' + options.port;
@@ -78,6 +105,7 @@ module.exports = (function () {
 				cb();
 				return;
 			}
+
 			var cp = spawn(options.bin, args, {
 				cwd: options.base,
 				stdio: 'inherit'
@@ -86,17 +114,15 @@ module.exports = (function () {
 			// check when the server is ready. tried doing it by listening
 			// to the child process `data` event, but it's not triggered...
 			checkServer(options.hostname, options.port, function () {
-				if (!options.keepalive) {
-					cb();
-				}
-
 				if (options.open) {
-					open('http://' + host);
+					open('http://' + host + options.root);
 				}
+				cb();
 			}.bind(this));
 		}.bind(this));
 	};
 	return {
-		server: server
+		server: server,
+		closeServer: closeServer
 	}
 })();

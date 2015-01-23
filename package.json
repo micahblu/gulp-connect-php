@@ -24,5 +24,9 @@
   "dependencies": {
     "bin-version-check": "^2.1.0",
     "opn": "^1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "supertest": "^0.15.0"
   }
 }
