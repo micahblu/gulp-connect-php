@@ -27,25 +27,24 @@ gulp.task('default', ['connect']);
 
 ## Examples
 
-#### Use it with gulp.watch
+#### Use it with Browser Sync
 
 ```js
 var gulp = require('gulp'),
-    connect = require('gulp-connect-php');
+    connect = require('gulp-connect-php'),
+    browserSync = require('browser-sync');
 
-gulp.task('connect', function() {
-	connect.server();
+gulp.task('connect-sync', function() {
+  connect.server({}, function (){
+    browserSync({
+      proxy: 'localhost:8000'
+    });
+  });
+
+  gulp.watch('**/*.php').on('change', function () {
+    browserSync.reload();
+  });
 });
-
-gulp.task('php', function(){
-  gulp.src('./*.php')
-	.pipe(connect.reload());
-});
-
-gulp.task('watch', function(){
-	gulp.watch(['./*.php'], ['php']);
-});
-
 ```
 
 ## Options
