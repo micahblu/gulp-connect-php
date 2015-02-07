@@ -1,0 +1,15 @@
+{
+  "name": "browser-sync-test",
+  "version": "1.0.1",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.0.0-rc9",
+    "gulp": "^3.8.10"
+  }
+}
