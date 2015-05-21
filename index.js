@@ -7,6 +7,7 @@ var binVersionCheck = require('bin-version-check');
 
 module.exports = (function () {
 	var checkServerTries = 0;
+	var workingPort = 8000;
 
 	function checkServer(hostname, port, cb) {
 		setTimeout(function () {
@@ -52,7 +53,7 @@ module.exports = (function () {
 	}
 
 	var closeServer = function (cb) {
-		var child = exec('lsof -i :8000',
+		var child = exec('lsof -i :' + workingPort,
 		  function (error, stdout, stderr) {
 		    //console.log('stdout: ' + stdout);
 		    //console.log('stderr: ' + stderr);
@@ -89,6 +90,7 @@ module.exports = (function () {
 			root: '/'
 		}, options);
 
+		workingPort = options.port;
 		var host = options.hostname + ':' + options.port;
 		var args = ['-S', host];
 
