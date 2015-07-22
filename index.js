@@ -106,11 +106,19 @@ module.exports = (function () {
 				return;
 			}
 
-			var cp = spawn(options.bin, args, {
-				cwd: options.base,
-				stdio: 'inherit'
-			});
-
+			var checkPath = function(){
+			    var exists = fs.existsSync(options.base);
+			    if (exists === true) {
+			        spawn(options.bin, args, {
+						cwd: options.base,
+						stdio: 'inherit'
+					});
+			    }
+			    else{
+			    	setTimeout(checkPath, 100); 
+			    }
+			}
+			checkPath(); 
 			// check when the server is ready. tried doing it by listening
 			// to the child process `data` event, but it's not triggered...
 			checkServer(options.hostname, options.port, function () {
