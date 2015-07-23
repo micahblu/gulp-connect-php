@@ -86,7 +86,8 @@ module.exports = (function () {
 			keepalive: false,
 			open: false,
 			bin: 'php',
-			root: '/'
+			root: '/',
+			stdio: 'inherit'
 		}, options);
 
 		var host = options.hostname + ':' + options.port;
@@ -108,7 +109,7 @@ module.exports = (function () {
 
 			var cp = spawn(options.bin, args, {
 				cwd: options.base,
-				stdio: 'inherit'
+				stdio: options.stdio
 			});
 
 			// check when the server is ready. tried doing it by listening
