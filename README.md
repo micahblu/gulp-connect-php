@@ -37,7 +37,7 @@ var gulp = require('gulp'),
 gulp.task('connect-sync', function() {
   connect.server({}, function (){
     browserSync({
-      proxy: 'localhost:8000'
+      proxy: '127.0.0.1:8000'
     });
   });
 
