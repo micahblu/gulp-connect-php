@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 var http = require('http');
 var open = require('opn');
 var binVersionCheck = require('bin-version-check');
-var fs = requires('fs');
+var fs = require('fs');
 
 module.exports = (function () {
 	var checkServerTries = 0;
