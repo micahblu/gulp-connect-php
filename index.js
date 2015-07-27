@@ -4,6 +4,7 @@ var exec = require('child_process').exec;
 var http = require('http');
 var open = require('opn');
 var binVersionCheck = require('bin-version-check');
+var fs = require('fs');
 
 module.exports = (function () {
 	var checkServerTries = 0;
@@ -108,12 +109,19 @@ module.exports = (function () {
 				cb();
 				return;
 			}
-
-			var cp = spawn(options.bin, args, {
-				cwd: options.base,
-				stdio: options.stdio
-			});
-
+			var checkPath = function(){
+			    var exists = fs.existsSync(options.base);
+			    if (exists === true) {
+			        spawn(options.bin, args, {
+						cwd: options.base,
+						stdio: 'inherit'
+					});
+			    }
+			    else{
+			    	setTimeout(checkPath, 100); 
+			    }
+			}
+			checkPath(); 
 			// check when the server is ready. tried doing it by listening
 			// to the child process `data` event, but it's not triggered...
 			checkServer(options.hostname, options.port, function () {
