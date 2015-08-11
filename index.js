@@ -114,7 +114,7 @@ module.exports = (function () {
 			    if (exists === true) {
 			        spawn(options.bin, args, {
 						cwd: options.base,
-						stdio: 'inherit'
+						stdio: options.stdio
 					});
 			    }
 			    else{
