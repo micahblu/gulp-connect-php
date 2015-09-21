@@ -103,6 +103,10 @@ module.exports = (function () {
 		if (options.router) {
 			args.push(options.router);
 		}
+		
+		if (options.base) {
+			args.push('-t', options.base);
+		}
 
 		binVersionCheck(options.bin, '>=5.4', function (err) {
 			if (err) {
