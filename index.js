@@ -117,7 +117,7 @@ module.exports = (function () {
 			    var exists = fs.existsSync(options.base);
 			    if (exists === true) {
 			        spawn(options.bin, args, {
-						cwd: options.base,
+						//cwd: options.base,
 						stdio: options.stdio
 					});
 			    }
