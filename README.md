@@ -119,6 +119,13 @@ Default: Built-in `php.ini`
 
 Path to a custom [`php.ini`](http://php.net/manual/en/ini.php) config file.
 
+### stdio
+
+Type: `string`  
+Default: `'inherit'`
+
+Node's [stdio parameter](https://nodejs.org/api/child_process.html#child_process_options_stdio), set it to `'ignore'` to suppress all the logging into console of the php server process.
+
 ## License
 
 MIT © [Micah Blu](http://micahblu.com)
