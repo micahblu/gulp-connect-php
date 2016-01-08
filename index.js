@@ -103,6 +103,10 @@ module.exports = (function () {
 		if (options.router) {
 			args.push(options.router);
 		}
+		
+		if (options.base) {
+			args.push('-t', options.base);
+		}
 
 		binVersionCheck(options.bin, '>=5.4', function (err) {
 			if (err) {
@@ -113,7 +117,7 @@ module.exports = (function () {
 			    var exists = fs.existsSync(options.base);
 			    if (exists === true) {
 			        spawn(options.bin, args, {
-						cwd: options.base,
+						//cwd: options.base,
 						stdio: options.stdio
 					});
 			    }
