@@ -126,6 +126,13 @@ Default: `'inherit'`
 
 Node's [stdio parameter](https://nodejs.org/api/child_process.html#child_process_options_stdio), set it to `'ignore'` to suppress all the logging into console of the php server process.
 
+### env
+
+Type: `object`  
+Default: `{}`
+
+Node's [spawn env option](https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options), to set environment variables in key-value pairs
+
 ## License
 
 MIT © [Micah Blu](http://micahblu.com)
