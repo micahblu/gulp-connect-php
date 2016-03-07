@@ -89,7 +89,8 @@ module.exports = (function () {
 			open: false,
 			bin: 'php',
 			root: '/',
-			stdio: 'inherit'
+			stdio: 'inherit',
+            env: {}
 		}, options);
 
 		workingPort = options.port;
@@ -114,7 +115,8 @@ module.exports = (function () {
 			    if (exists === true) {
 			        spawn(options.bin, args, {
 						cwd: options.base,
-						stdio: options.stdio
+						stdio: options.stdio,
+                        env: extend(process.env, options.env)
 					});
 			    }
 			    else{
