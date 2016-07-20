@@ -72,13 +72,6 @@ Default: `'.'`
 
 From which folder the webserver will be served. Defaults to the directory of the gulpfile.
 
-### keepalive
-
-Type: `boolean`  
-Default: `true`
-
-Keep the server alive indefinitely.
-
 ### open
 
 Type: `boolean`  
