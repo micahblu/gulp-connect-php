@@ -74,7 +74,6 @@ module.exports = (function () {
 			port: 8000,
 			hostname: '127.0.0.1',
 			base: '.',
-			keepalive: false,
 			open: false,
 			bin: 'php',
 			root: '/',
