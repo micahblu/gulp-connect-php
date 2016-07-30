@@ -1,4 +1,5 @@
 'use strict';
+var extend = require('util')._extend;
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var http = require('http');
@@ -41,18 +42,6 @@ module.exports = (function () {
 		}, 50);
 	}
 
-	function extend(obj /* , ...source */) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    for (var key in arguments[i]) {
-	      if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
-	         obj[key] = arguments[i][key];
-	         obj[key] = (typeof arguments[i][key] === 'object' && arguments[i][key] ? extend(obj[key], arguments[i][key]) : arguments[i][key]);
-	      }
-	    }
-	  }
-	  return obj;
-	}
-
 	var closeServer = function (cb) {
 		var child = exec('lsof -i :' + workingPort,
 		  function (error, stdout, stderr) {
@@ -80,7 +69,7 @@ module.exports = (function () {
 		if (!cb) {
 			cb = function(){};
 		}
-	
+
 		options = extend({
 			port: 8000,
 			hostname: '127.0.0.1',
@@ -94,14 +83,14 @@ module.exports = (function () {
 
 		workingPort = options.port;
 		var host = options.hostname + ':' + options.port;
-		var args = ['-S', host];
+		var args = ['-S', host, '-t', options.base];
 
 		if (options.ini) {
 			args.push('-c', options.ini);
 		}
 
 		if (options.router) {
-			args.push(options.router);
+			args.push(require('path').resolve(options.router));
 		}
 
 		binVersionCheck(options.bin, '>=5.4', function (err) {
@@ -113,15 +102,15 @@ module.exports = (function () {
 			    var exists = fs.existsSync(options.base);
 			    if (exists === true) {
 			        spawn(options.bin, args, {
-						cwd: options.base,
+						cwd: '.',
 						stdio: options.stdio
 					});
 			    }
 			    else{
-			    	setTimeout(checkPath, 100); 
+				setTimeout(checkPath, 100);
 			    }
-			}
-			checkPath(); 
+			};
+			checkPath();
 			// check when the server is ready. tried doing it by listening
 			// to the child process `data` event, but it's not triggered...
 			checkServer(options.hostname, options.port, function () {
