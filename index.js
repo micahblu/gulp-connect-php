@@ -92,7 +92,7 @@ module.exports = (function () {
 			args.push(require('path').resolve(options.router));
 		}
 
-		binVersionCheck(options.bin, '>=5.4', function (err) {
+		binVersionCheck(`"${options.bin}"`, '>=5.4', function (err) {
 			if (err) {
 				cb();
 				return;
