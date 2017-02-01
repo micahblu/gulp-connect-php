@@ -1,6 +1,6 @@
 {
   "name": "gulp-connect-php",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Starts a php server",
   "main": "index.js",
   "scripts": {
