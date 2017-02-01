@@ -1,7 +1,6 @@
 'use strict';
 var extend = require('util')._extend;
 var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
 var http = require('http');
 var open = require('opn');
 var binVersionCheck = require('bin-version-check');
@@ -43,26 +42,14 @@ module.exports = (function () {
 	}
 
 	var closeServer = function (cb) {
-		var child = exec('lsof -i :' + workingPort,
-		  function (error, stdout, stderr) {
-		    //console.log('stdout: ' + stdout);
-		    //console.log('stderr: ' + stderr);
-		    if (error !== null) {
-		      console.log('exec error: ' + error);
-		    }
+        if (module.child.pid)
+        {
+            module.child.kill('SIGTERM');
+            cb();
 
-		    // get pid then kill it
-		    var pid = stdout.match(/php\s+?([0-9]+)/)[1];
-		    if (pid) {
-		    	exec('kill ' + pid, function (error, stdout, stderr) {
-		    		//console.log('stdout: ' + stdout);
-		   			//console.log('stderr: ' + stderr);
-		    		cb();
-		    	});
-		    } else {
-		    	cb({error: "couldn't find process id and kill it"});
-		    }
-		});
+        } else {
+            cb({error: "couldn't find process id and kill it"});
+        }
 	};
 
 	var server = function (options, cb){
@@ -92,7 +79,7 @@ module.exports = (function () {
 			args.push(require('path').resolve(options.router));
 		}
 
-		binVersionCheck(options.bin, '>=5.4', function (err) {
+		binVersionCheck(`"${options.bin}"`, '>=5.4', function (err) {
 			if (err) {
 				cb();
 				return;
@@ -100,13 +87,13 @@ module.exports = (function () {
 			var checkPath = function(){
 			    var exists = fs.existsSync(options.base);
 			    if (exists === true) {
-			        spawn(options.bin, args, {
+			        module.child = spawn(options.bin, args, {
 						cwd: '.',
 						stdio: options.stdio
 					});
 			    }
 			    else{
-				setTimeout(checkPath, 100);
+				    setTimeout(checkPath, 100);
 			    }
 			};
 			checkPath();
@@ -123,5 +110,5 @@ module.exports = (function () {
 	return {
 		server: server,
 		closeServer: closeServer
-	}
+	};
 })();
