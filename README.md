@@ -119,6 +119,27 @@ Default: `'inherit'`
 
 Node's [stdio parameter](https://nodejs.org/api/child_process.html#child_process_options_stdio), set it to `'ignore'` to suppress all the logging into console of the php server process.
 
+### configCallback
+
+Type: `function (type, collection) : collection`  
+
+Prototype:  
+  - `type` - String, either `OPTIONS_SPAWN_OBJ` or `OPTIONS_PHP_CLI_ARR`.
+  - `collection` - Array or Object, the initial version of the collection specified by `type`. 
+
+     Return: Optionally modified version of `collection`.
+  
+Default: `'null'` (Which is replaced with a no-op call that returns an unmodified version of the `collection` parameter)
+
+Allows the caller to modify the `spawn` [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options) object and or the [PHP command line arguments](http://php.net/manual/en/features.commandline.options.php) (array) before the [PHP development server](http://php.net/manual/en/features.commandline.webserver.php) is invoked.
+
+### debug
+
+Type: `boolean`
+Default: `'false'`
+
+Enables debugging of the spawn call and its parameters.
+
 ## License
 
 MIT © [Micah Blu](http://micahblu.com)
