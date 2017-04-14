@@ -7,7 +7,7 @@ var open = require('opn');
 var binVersionCheck = require('bin-version-check');
 var fs = require('fs');
 
-module.exports = (function () {
+module.exports = (function (OPTIONS_SPAWN_OBJ, OPTIONS_PHP_CLI_ARR) {
 	var checkServerTries = 0;
 	var workingPort = 8000;
 
@@ -77,7 +77,9 @@ module.exports = (function () {
 			open: false,
 			bin: 'php',
 			root: '/',
-			stdio: 'inherit'
+			stdio: 'inherit',
+			configCallback: null,
+			debug: false
 		}, options);
 
 		workingPort = options.port;
@@ -92,6 +94,25 @@ module.exports = (function () {
 			args.push(require('path').resolve(options.router));
 		}
 
+		if (options.debug) {
+			spawn = function (outerSpawn) { return function debugSpawnWrapper(file, args, options) {
+				console.log('Invoking Spawn with:');
+				console.log(file);
+				console.log(args);
+				console.log(options);
+
+				return outerSpawn(file, args, options);
+			}}(spawn);
+		}
+
+		if (options.configCallback === null || options.configCallback === undefined) {
+		  options.configCallback = function noOpConfigCallback(type, collection) { return collection; }
+		}
+
+		spawn = function (outerSpawn) { return function configCallbackSpawnWrapper(file, spawnArgs, spawnOptions) {
+		  return outerSpawn(file, options.configCallback(OPTIONS_PHP_CLI_ARR, spawnArgs), options.configCallback(OPTIONS_SPAWN_OBJ, spawnOptions));
+		}}(spawn);
+		
 		binVersionCheck(options.bin, '>=5.4', function (err) {
 			if (err) {
 				cb();
@@ -122,6 +143,8 @@ module.exports = (function () {
 	};
 	return {
 		server: server,
-		closeServer: closeServer
+		closeServer: closeServer,
+		OPTIONS_SPAWN_OBJ: OPTIONS_SPAWN_OBJ,
+		OPTIONS_PHP_CLI_ARR: OPTIONS_PHP_CLI_ARR
 	}
-})();
+})('spawn', 'php_args');
