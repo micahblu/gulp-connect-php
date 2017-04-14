@@ -1,0 +1,1 @@
+ENVVAR=<?php echo getenv('TEST_ENV_VAR'); ?>,MEM_LIMIT=<?php echo ini_get('memory_limit'); ?>;
