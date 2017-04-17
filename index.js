@@ -11,9 +11,22 @@
   const fs = require('fs');
 
   class PhpDevelopmentServerConnection {
-    constructor() {
+    constructor(opts) {
       this.checkServerTries = 0;
+
       this.workingPort = 8000;
+
+      this.defaults = Object.assign({
+        port: 8000,
+        hostname: '127.0.0.1',
+        base: '.',
+        open: false,
+        bin: 'php',
+        root: '/',
+        stdio: 'inherit',
+        configCallback: null,
+        debug: false
+      }, opts || {});
       return this; // `new` bug
     }
 
@@ -25,6 +38,7 @@
       cb();
     }
 
+    get port() { return this.workingPort; }
 
     checkServer(hostname, port, cb) {
       const self = this;
@@ -60,27 +74,16 @@
 
     server(options, cb) {
       if (!cb) {
-        cb = function () {
-        };
+        cb = function () { };
       }
 
-      var self = this;
+      const self = this;
 
-      options = Object.assign({
-        port: 8000,
-        hostname: '127.0.0.1',
-        base: '.',
-        open: false,
-        bin: 'php',
-        root: '/',
-        stdio: 'inherit',
-        configCallback: null,
-        debug: false
-      }, options);
+      options = Object.assign({}, this.defaults, options);
 
       this.workingPort = options.port;
-      var host = options.hostname + ':' + options.port;
-      var args = ['-S', host, '-t', options.base];
+      const host = options.hostname + ':' + options.port;
+      const args = ['-S', host, '-t', options.base];
 
       if (options.ini) {
         args.push('-c', options.ini);
@@ -121,8 +124,8 @@
           cb();
           return;
         }
-        var checkPath = function () {
-          var exists = fs.existsSync(options.base);
+        const checkPath = function () {
+          const exists = fs.existsSync(options.base);
           if (exists === true) {
             self.childProcess = spawn(options.bin, args, {
               cwd: '.',

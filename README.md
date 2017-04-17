@@ -2,7 +2,7 @@
 
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
-This is pretty much a gulp version of [@sindresorhus's](https://github.com/sindresorhus) [grunt-php] (https://github.com/sindresorhus/grunt-php) and acts as a _basic version_ drop-in replacement for [gulp-connect](https://www.npmjs.com/package/gulp-connect), though please note not all features from gulp-connect are supported with gulp-connect-php. I am open to supporting other features and pull requests that implement them.
+This is pretty much a gulp version of [@sindresorhus's](https://github.com/sindresorhus) [grunt-php](https://github.com/sindresorhus/grunt-php) and acts as a _basic version_ drop-in replacement for [gulp-connect](https://www.npmjs.com/package/gulp-connect), though please note not all features from gulp-connect are supported with gulp-connect-php. I am open to supporting other features and pull requests that implement them.
 
 Uses the built-in server in PHP 5.4.0+.
 
@@ -14,6 +14,7 @@ $ npm install --save-dev gulp-connect-php
 
 ## Usage
 
+### As a Singleton
 ```js
 var gulp = require('gulp'),
     connect = require('gulp-connect-php');
@@ -25,9 +26,26 @@ gulp.task('connect', function() {
 gulp.task('default', ['connect']);
 ```
 
+### As an Instance
+```js
+var gulp = require('gulp'),
+    connect = require('gulp-connect-php');
+
+let server = new connect();
+
+gulp.task('connect', function() {
+	server.server();
+});
+gulp.task('disconnect', function() {
+	server.closeServer();
+});
+
+gulp.task('default', ['connect', 'disconnect']);
+```
+
 ## Examples
 
-#### Use it with Browser Sync
+### Use it with Browser Sync
 
 ```js
 var gulp = require('gulp'),
@@ -45,6 +63,43 @@ gulp.task('connect-sync', function() {
     browserSync.reload();
   });
 });
+```
+
+### Advanced Option Manipulation
+
+```js
+gulp.task('connect', function() {
+  connect.server({
+    configCallback: function _configCallback(type, collection) {
+      // If you wish to leave one of the argument types alone, simply return the passed in collection.
+      if (type === connect.OPTIONS_SPAWN_OBJ) { // As the constant suggests, collection is an Object.
+
+        // Lets add a custom env var. Good for injecting AWS_RDS config variables.
+        collection.env = Object.assign({
+          MY_CUSTOM_ENV_VAR: "env_var_value"
+        }, process.env);
+
+        return collection;
+      } else if (type === connect.OPTIONS_PHP_CLI_ARR) { // As the constant suggests, collection is an Array.
+        let newArgs = [
+          '-e',                     // Generate extended information for debugger/profiler.
+          '-d', 'memory_limit=2G'   // Define INI entry, Up memory limit to 2G.
+        ];
+
+        // Ensure our argument switches appear before the rest.
+        return newArgs.concat(collection);
+      }
+    }
+  }, function _connected_callback() {
+    console.log("PHP Development Server Connected.");
+  });
+});
+
+gulp.task('disconnect', function() {
+	connect.closeServer();
+});
+
+gulp.task('default', ['connect', 'disconnect']);
 ```
 
 ## Options
@@ -123,7 +178,8 @@ Node's [stdio parameter](https://nodejs.org/api/child_process.html#child_process
 
 Type: `function (type, collection) : collection`  
 
-Prototype:  
+Prototype:
+
   - `type` - String, either `OPTIONS_SPAWN_OBJ` or `OPTIONS_PHP_CLI_ARR`.
   - `collection` - Array or Object, the initial version of the collection specified by `type`. 
 
