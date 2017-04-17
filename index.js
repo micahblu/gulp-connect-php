@@ -1,7 +1,7 @@
 /* jshint esversion: 6, node: true */
 'use strict';
 
-(function _gulp_php_connect_module_scoping(OPTIONS_SPAWN_OBJ, OPTIONS_PHP_CLI_ARR) {
+(function _gulp_connect_php_module_scoping(OPTIONS_SPAWN_OBJ, OPTIONS_PHP_CLI_ARR) {
   const childProcess = require('child_process');
   let spawn = childProcess.spawn;
   const exec = childProcess.exec;
@@ -19,6 +19,12 @@
   const PhpDevelopmentServerConnection = ((function _PhpDevelopmentServerConnection_private_scope() {
     const Status = new EnumSet('NEW', 'STARTING', 'STARTED', 'FINISHED');
 
+    /**
+     * Private: Check wherther the server is running.
+     * @param hostname
+     * @param port
+     * @param cb
+     */
     function checkServer(hostname, port, cb) {
       const self = this;
       //console.log(`[${this.counter}] checkServer`);
@@ -55,7 +61,17 @@
       }, 15);
     }
 
+    /**
+     * PHP Development Server Connection Instance
+     *
+     * {@link http://php.net/manual/en/features.commandline.webserver.php}
+     */
     class PhpDevelopmentServerConnection {
+      /**
+       * Create a new Instance
+       * @param opts Default Options. Will be merged with our own internal set of default options. Can be overwridden in the connect ('server') call.
+       * @returns {PhpDevelopmentServerConnection}
+       */
       constructor(opts) {
         //this.counter = ++counter;
         //console.log(`[${this.counter}] constructor`);
@@ -81,6 +97,10 @@
         return this; // `new` bug
       }
 
+      /**
+       * 'Close'/Shutdown the PHP Development Server
+       * @param cb Optional single parameter Callback. Parameter is the return (if any) of the node `ChildProcess.kill(...)` call or nothing if not started.
+       */
       closeServer(cb) {
         cb = cb || function _closeServerCb_noop() { };
         //console.log(`[${this.counter}] closeServer`);
@@ -99,13 +119,26 @@
         cb();
       }
 
+      /**
+       * Get the port the server is running on.
+       * @returns {number|*} Port number.
+       */
       get port() { return this.workingPort; }
 
+      /**
+       * Start the Server
+       * @param options Optional Server Options to overwrite the defaults in the CTor.
+       * @param cb Optional Callback for Completion. May pass in an error when there is a fault.
+       */
       server(options, cb) {
         //console.log(`[${this.counter}] server`);
         cb = cb || function _serverCB_noop() { };
 
         const self = this;
+
+        if (this.status !== Status.NEW && this.status !== Status.FINISHED) {
+          return cb(new Error('You may not start a server that is starting or started.'));
+        }
 
         options = Object.assign({}, this.defaults, options);
 
@@ -148,7 +181,7 @@
 
         binVersionCheck(options.bin, '>=5.4', function _binVerCheck(err) {
           if (err) {
-            cb();
+            cb(err);
             return;
           }
           const checkPath = function _checkPath() {

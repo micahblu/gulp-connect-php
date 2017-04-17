@@ -20,7 +20,8 @@ const noopReturn = function _noopReturn(x) { return x; };
 describe('gulp-connect-php', function _base_suite1() {
 
   it('Should start a basic php server', function _test_basic(done) {
-    connect.server({}, function _basic_serverCallback() {
+    connect.server({}, function _basic_serverCallback(error) {
+      if (error) throw error;
       request('http://127.0.0.1:8000')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
@@ -44,7 +45,8 @@ describe('gulp-connect-php', function _base_suite1() {
     const conn1 = new connect();
     const conn2 = new connect();
 
-    conn1.server({port: 8001}, function _multiples1_serverCallback() {
+    conn1.server({port: 8001}, function _multiples1_serverCallback(error) {
+      if (error) throw error;
       request('http://127.0.0.1:8001')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
@@ -57,7 +59,8 @@ describe('gulp-connect-php', function _base_suite1() {
         });
     });
 
-    conn2.server({port: 8002}, function _multiples2_serverCallback() {
+    conn2.server({port: 8002}, function _multiples2_serverCallback(error) {
+      if (error) throw error;
       request('http://127.0.0.1:8002')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
@@ -87,7 +90,8 @@ describe('gulp-connect-php', function _base_suite1() {
           return newArgs.concat(collection);
         }
       }
-    }, function _configCallback_serverCallback() {
+    }, function _configCallback_serverCallback(error) {
+      if (error) throw error;
       request('http://127.0.0.1:8000')
         .get('/test/fixtures/config-cb-checker.php')
         .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
@@ -102,7 +106,8 @@ describe('gulp-connect-php', function _base_suite1() {
   });
 
   it('Should start a basic php server without a close callback', function _test_basicNoCloseCB(done) {
-    connect.server({}, function _basicNoCloseCB_serverCallback() {
+    connect.server({}, function _basicNoCloseCB_serverCallback(error) {
+      if (error) throw error;
       request('http://127.0.0.1:8000')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
