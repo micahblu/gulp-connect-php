@@ -142,4 +142,4 @@ Enables debugging of the spawn call and its parameters.
 
 ## License
 
-MIT © [Micah Blu](http://micahblu.com)
+MIT © [Micah Blu](http://micahblu.net)
