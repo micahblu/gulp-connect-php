@@ -82,6 +82,7 @@
       }
 
       closeServer(cb) {
+        cb = cb || function _closeServerCb_noop() { };
         //console.log(`[${this.counter}] closeServer`);
         const self = this;
         if (this.loading) {
@@ -102,7 +103,7 @@
 
       server(options, cb) {
         //console.log(`[${this.counter}] server`);
-        cb = cb || function _noop() { };
+        cb = cb || function _serverCB_noop() { };
 
         const self = this;
 
