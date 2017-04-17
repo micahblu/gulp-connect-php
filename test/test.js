@@ -120,4 +120,58 @@ describe('gulp-connect-php', function _base_suite1() {
     });
   });
 
+  it('Should start a basic php server, with a set environment variable and updated memory limits set via the configCallback option with null', function _test_configCallback(done) {
+    connect.server({
+      configCallback: function _configCallback(type, collection) {
+        if (type === connect.OPTIONS_SPAWN_OBJ) {
+          collection.env = Object.assign({
+            TEST_ENV_VAR: "SET_OK"
+          }, process.env);
+
+          return collection;
+        } else if (type === connect.OPTIONS_PHP_CLI_ARR) {
+          return null;
+        }
+      }
+    }, function _configCallback_serverCallback(error) {
+      if (error) throw error;
+      request('http://127.0.0.1:8000')
+        .get('/test/fixtures/config-cb-checker.php')
+        .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
+        .expect(200)
+        .end(function _configCallback_endEvent(err, res) {
+          if (err) return done(err);
+          connect.closeServer(function _configCallback_closeServer() {
+            done();
+          });
+        });
+    });
+  });
+
+  it('Should start a basic php server, with a set environment variable and updated memory limits set via the configCallback option with no return', function _test_configCallback(done) {
+    connect.server({
+      configCallback: function _configCallback(type, collection) {
+        if (type === connect.OPTIONS_SPAWN_OBJ) {
+          collection.env = Object.assign({
+            TEST_ENV_VAR: "SET_OK"
+          }, process.env);
+
+          return collection;
+        }
+      }
+    }, function _configCallback_serverCallback(error) {
+      if (error) throw error;
+      request('http://127.0.0.1:8000')
+        .get('/test/fixtures/config-cb-checker.php')
+        .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
+        .expect(200)
+        .end(function _configCallback_endEvent(err, res) {
+          if (err) return done(err);
+          connect.closeServer(function _configCallback_closeServer() {
+            done();
+          });
+        });
+    });
+  });
+
 });

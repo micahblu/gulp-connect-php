@@ -102,6 +102,52 @@ gulp.task('disconnect', function() {
 gulp.task('default', ['connect', 'disconnect']);
 ```
 
+### Windows (via Batch file)
+
+Windows Batch file execution via a `%PATH%` specified batchfile is possible, but some considerations are required.
+
+1. The batch file must be on your `%PATH%` and executable with permissions of the invoker.
+2. You must pass the parameter set off to the PHP process.
+3. We have no -real- way of detecting an error state at this point.
+4. You must use the 'Advanced Option Maniulation' scheme and set the `shell` option on `spawn(...)`.
+
+#### Scenario
+
+- PHP is located at `C:\Users\mainuser\Applications\PHP\7.0.17-NTS-VC14\php.exe`.
+- The batch file is located at `C:\Users\mainuser\MyProject\strap\php.bat`.
+- I have set `%PATH%` manually to `C:\Users\mainuser\MyProject\strap\;%PATH%`.
+
+#### Contents of php.bat
+
+```batch
+@echo off
+
+REM We specify the whole path to PHP since the working directory is that of gulp... 
+REM unless we also changed that in our gulp callback.
+
+C:\Users\mainuser\Applications\PHP\7.0.17-NTS-VC14\php.exe %*
+```
+
+#### Contents of our gulp task
+```js
+gulp.task('connect', function _gulp_connect_task() {
+  connect.server({
+    configCallback: function _configCallback(type, collection) {
+      if (type === connect.OPTIONS_SPAWN_OBJ) {
+        // Windows Batch files are NOT executable on their own. This will start a shell 
+        // session then execute.
+        collection.shell = true;
+        return collection;
+      }
+    }
+  }, function _connected_callback() {
+    console.log("PHP Development Server Connected.");
+  });
+});
+
+gulp.task('default', ['connect']);
+````
+
 ## Options
 
 ### port

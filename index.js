@@ -175,7 +175,7 @@
 
         spawn = function _configCallbackSpawn(outerSpawn) {
           return function configCallbackSpawnWrapper(file, spawnArgs, spawnOptions) {
-            return outerSpawn(file, options.configCallback(OPTIONS_PHP_CLI_ARR, spawnArgs), options.configCallback(OPTIONS_SPAWN_OBJ, spawnOptions));
+            return outerSpawn(file, options.configCallback(OPTIONS_PHP_CLI_ARR, spawnArgs) || spawnArgs, options.configCallback(OPTIONS_SPAWN_OBJ, spawnOptions) || spawnOptions);
           }
         }(spawn);
 
