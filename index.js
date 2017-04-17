@@ -179,7 +179,7 @@
           }
         }(spawn);
 
-        binVersionCheck(options.bin, '>=5.4', function _binVerCheck(err) {
+        binVersionCheck(`"${options.bin}"`, '>=5.4', function _binVerCheck(err) {
           if (err) {
             cb(err);
             return;
