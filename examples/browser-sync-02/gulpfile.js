@@ -1,10 +1,13 @@
-var gulp = require('gulp'),
-    connect = require('../../index.js'),
-    browserSync = require('browser-sync');
+/* jshint esversion: 6, node: true */
+'use strict';
+
+const gulp = require('gulp'),
+  connect = require('../../index.js'),
+  browserSync = require('browser-sync');
 
 
 //task that fires up php server at port 8001
-gulp.task('connect', function(callback) {
+gulp.task('connect', function (callback) {
   connect.server({
     port: 8001
   }, callback);
@@ -12,10 +15,10 @@ gulp.task('connect', function(callback) {
 
 
 //task that fires up browserSync proxy after connect server has started
-gulp.task('browser-sync',['connect'], function() {
-    browserSync({
-      proxy: '127.0.0.1:8001',
-      port: 8910
+gulp.task('browser-sync', ['connect'], function () {
+  browserSync({
+    proxy: '127.0.0.1:8001',
+    port: 8910
   });
 });
 
