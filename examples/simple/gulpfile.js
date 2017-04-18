@@ -1,10 +1,13 @@
-var gulp = require('gulp'),
-    connect = require('../../index.js');
+/* jshint esversion: 6, node: true */
+'use strict';
 
-gulp.task('connect', function() {
-    connect.server({}, function(){
-    	// connected
-    });
+const gulp = require('gulp'),
+  connect = require('../../index.js');
+
+gulp.task('connect', function () {
+  connect.server({}, function () {
+    // connected
+  });
 });
 
 gulp.task('default', ['connect']);

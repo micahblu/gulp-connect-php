@@ -1,9 +1,12 @@
-var gulp = require('gulp'),
-    connect = require('../../index.js'),
-    browserSync = require('browser-sync');
+/* jshint esversion: 6, node: true */
+'use strict';
 
-gulp.task('connect-sync', function() {
-	connect.server({}, function (){
+const gulp = require('gulp'),
+  connect = require('../../index.js'),
+  browserSync = require('browser-sync');
+
+gulp.task('connect-sync', function () {
+  connect.server({}, function () {
     browserSync({
       proxy: 'localhost:8000'
     });
