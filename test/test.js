@@ -20,9 +20,9 @@ const noopReturn = function _noopReturn(x) { return x; };
 describe('gulp-connect-php', function _base_suite1() {
 
   it('Should start a basic php server', function _test_basic(done) {
-    connect.server({}, function _basic_serverCallback(error) {
+    connect.server({port: 8001}, function _basic_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8000')
+      request('http://127.0.0.1:8001')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
         .expect(200)
@@ -45,9 +45,9 @@ describe('gulp-connect-php', function _base_suite1() {
     const conn1 = new connect();
     const conn2 = new connect();
 
-    conn1.server({port: 8001}, function _multiples1_serverCallback(error) {
+    conn1.server({port: 8002}, function _multiples1_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8001')
+      request('http://127.0.0.1:8002')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
         .expect(200)
@@ -59,9 +59,9 @@ describe('gulp-connect-php', function _base_suite1() {
         });
     });
 
-    conn2.server({port: 8002}, function _multiples2_serverCallback(error) {
+    conn2.server({port: 8003}, function _multiples2_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8002')
+      request('http://127.0.0.1:8003')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
         .expect(200)
@@ -76,6 +76,7 @@ describe('gulp-connect-php', function _base_suite1() {
 
   it('Should start a basic php server, with a set environment variable and updated memory limits set via the configCallback option', function _test_configCallback(done) {
     connect.server({
+      port: 8004,
       configCallback: function _configCallback(type, collection) {
         if (type === connect.OPTIONS_SPAWN_OBJ) {
           collection.env = Object.assign({
@@ -92,7 +93,7 @@ describe('gulp-connect-php', function _base_suite1() {
       }
     }, function _configCallback_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8000')
+      request('http://127.0.0.1:8004')
         .get('/test/fixtures/config-cb-checker.php')
         .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
         .expect(200)
@@ -106,9 +107,9 @@ describe('gulp-connect-php', function _base_suite1() {
   });
 
   it('Should start a basic php server without a close callback', function _test_basicNoCloseCB(done) {
-    connect.server({}, function _basicNoCloseCB_serverCallback(error) {
+    connect.server({port: 8005}, function _basicNoCloseCB_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8000')
+      request('http://127.0.0.1:8005')
         .get('/test/fixtures/hello.php')
         .expect(/hello world/)
         .expect(200)
@@ -122,6 +123,7 @@ describe('gulp-connect-php', function _base_suite1() {
 
   it('Should start a basic php server, with a set environment variable and updated memory limits set via the configCallback option with null', function _test_configCallback(done) {
     connect.server({
+      port: 8006,
       configCallback: function _configCallback(type, collection) {
         if (type === connect.OPTIONS_SPAWN_OBJ) {
           collection.env = Object.assign({
@@ -135,7 +137,7 @@ describe('gulp-connect-php', function _base_suite1() {
       }
     }, function _configCallback_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8000')
+      request('http://127.0.0.1:8006')
         .get('/test/fixtures/config-cb-checker.php')
         .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
         .expect(200)
@@ -150,6 +152,7 @@ describe('gulp-connect-php', function _base_suite1() {
 
   it('Should start a basic php server, with a set environment variable and updated memory limits set via the configCallback option with no return', function _test_configCallback(done) {
     connect.server({
+      port: 8007,
       configCallback: function _configCallback(type, collection) {
         if (type === connect.OPTIONS_SPAWN_OBJ) {
           collection.env = Object.assign({
@@ -161,7 +164,7 @@ describe('gulp-connect-php', function _base_suite1() {
       }
     }, function _configCallback_serverCallback(error) {
       if (error) throw error;
-      request('http://127.0.0.1:8000')
+      request('http://127.0.0.1:8007')
         .get('/test/fixtures/config-cb-checker.php')
         .expect(/ENVVAR=SET_OK,MEM_LIMIT=2\.1G;/)
         .expect(200)
@@ -173,5 +176,4 @@ describe('gulp-connect-php', function _base_suite1() {
         });
     });
   });
-
 });
