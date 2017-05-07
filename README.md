@@ -1,5 +1,7 @@
 # gulp-connect-php
 
+***REQUIRES NODE 5.0.0 OR GREATER***
+
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
 This is pretty much a gulp version of [@sindresorhus's](https://github.com/sindresorhus) [grunt-php](https://github.com/sindresorhus/grunt-php) and acts as a _basic version_ drop-in replacement for [gulp-connect](https://www.npmjs.com/package/gulp-connect), though please note not all features from gulp-connect are supported with gulp-connect-php. I am open to supporting other features and pull requests that implement them.
@@ -122,7 +124,7 @@ Windows Batch file execution via a `%PATH%` specified batchfile is possible, but
 ```batch
 @echo off
 
-REM We specify the whole path to PHP since the working directory is that of gulp... 
+REM We specify the whole path to PHP since the working directory is that of gulp...
 REM unless we also changed that in our gulp callback.
 
 C:\Users\mainuser\Applications\PHP\7.0.17-NTS-VC14\php.exe %*
@@ -134,7 +136,7 @@ gulp.task('connect', function _gulp_connect_task() {
   connect.server({
     configCallback: function _configCallback(type, collection) {
       if (type === connect.OPTIONS_SPAWN_OBJ) {
-        // Windows Batch files are NOT executable on their own. This will start a shell 
+        // Windows Batch files are NOT executable on their own. This will start a shell
         // session then execute.
         collection.shell = true;
         return collection;
@@ -227,10 +229,10 @@ Type: `function (type, collection) : collection`
 Prototype:
 
   - `type` - String, either `OPTIONS_SPAWN_OBJ` or `OPTIONS_PHP_CLI_ARR`.
-  - `collection` - Array or Object, the initial version of the collection specified by `type`. 
+  - `collection` - Array or Object, the initial version of the collection specified by `type`.
 
      Return: Optionally modified version of `collection`.
-  
+
 Default: `'null'` (Which is replaced with a no-op call that returns an unmodified version of the `collection` parameter)
 
 Allows the caller to modify the `spawn` [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options) object and or the [PHP command line arguments](http://php.net/manual/en/features.commandline.options.php) (array) before the [PHP development server](http://php.net/manual/en/features.commandline.webserver.php) is invoked.

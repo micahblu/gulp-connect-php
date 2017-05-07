@@ -1,8 +1,9 @@
 {
   "name": "gulp-connect-php",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Starts a php server",
   "main": "index.js",
+  "engines" : { "node" : ">=5.0.0" },
   "scripts": {
     "test": "mocha ./test"
   },
@@ -26,7 +27,7 @@
     "opn": "^1.0.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "supertest": "^0.15.0"
+    "mocha": "^3.2.0",
+    "supertest": "^3.0.0"
   }
 }
