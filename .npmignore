@@ -1,0 +1,9 @@
+node_modules/
+.idea
+.gitignore
+*.sh
+*.xml
+.babelrc
+.editorconfig
+*.tgz
+*.txz
