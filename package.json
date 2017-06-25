@@ -1,11 +1,14 @@
 {
   "name": "gulp-connect-php",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Starts a php server",
-  "main": "index.js",
-  "engines" : { "node" : ">=5.0.0" },
+  "main": "index-compat.js",
   "scripts": {
-    "test": "mocha ./test"
+    "__anchor": "cd .",
+    "test-compat": "npm run __anchor; mocha ./test",
+    "test-normative": "npm run __anchor; GCP_ES6=1 mocha ./test",
+    "test": "npm run test-normative; npm run test-compat",
+    "prepack": "npm run __anchor; ./convert.sh"
   },
   "repository": {
     "type": "git",
@@ -27,6 +30,10 @@
     "opn": "^1.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
     "mocha": "^3.2.0",
     "supertest": "^3.0.0"
   }

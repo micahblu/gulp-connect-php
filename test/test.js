@@ -3,9 +3,12 @@
 
 require("mocha");
 
+const testJSMain = process.env['GCP_ES6'] ? "../index.js" : "../index-compat.js";
+
+console.log("Testing against primary => ", testJSMain);
+
 const request = require("supertest"),
-  //assert = require("assert"),
-  connect = require("../index.js");
+  connect = require(testJSMain);
 
 /*
  - Anonymous Functions in the Test Suite should have internal names. This makes failure traces easier to read.
