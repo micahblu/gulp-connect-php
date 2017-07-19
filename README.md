@@ -1,6 +1,6 @@
 # gulp-connect-php
 
-***REQUIRES NODE 5.0.0 OR GREATER***
+***REQUIRES NODE 4 OR GREATER***
 
 > Start a [PHP-server](http://php.net/manual/en/features.commandline.webserver.php)
 
