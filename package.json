@@ -8,7 +8,7 @@
     "test-compat": "npm run __anchor; mocha ./test",
     "test-normative": "npm run __anchor; GCP_ES6=1 mocha ./test",
     "test": "npm run test-normative; npm run test-compat",
-    "prepack": "npm run __anchor; ./convert.sh"
+    "prepack": "npm run __anchor && npm i; ./convert.sh"
   },
   "repository": {
     "type": "git",
