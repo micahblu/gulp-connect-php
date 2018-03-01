@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set -x # verbose debugging
+
 IN_FILE='index.js'
 OUT_FILE='index-compat.js'
 BABEL_PATH='./node_modules/babel-cli/bin/babel.js'
@@ -13,9 +15,14 @@ while [ -h "$SCRIPT_ROOT_ENV_SOURCE" ]; do
 done
 export SCRIPT_ROOT_DIR="$( cd -P "$( dirname "$SCRIPT_ROOT_ENV_SOURCE" )" && pwd )"
 
-pushd "$SCRIPT_ROOT_DIR"
+pushd "$SCRIPT_ROOT_DIR" || { echo 'Could not enter primary directory.' ; exit 1; }
 
-echo "/* The following JavaScript file was preprocessed from $IN_FILE via Babel for support on older Node installations. */" > "$OUT_FILE"
-"$BABEL_PATH" "$IN_FILE" --presets es2017,es2016,es2015 | sed '1d' >> "$OUT_FILE"
+if [ ! -f "$BABEL_PATH" ]; then
+    npm i || { echo 'NPM Installation Failed.' ; exit 1; }
+fi
 
-popd
+echo "/* The following JavaScript file was preprocessed from $IN_FILE via Babel for support on older Node installations. */" > "$OUT_FILE.tmp"
+"$BABEL_PATH" "$IN_FILE" --presets es2017,es2016,es2015 | sed '1d' >> "$OUT_FILE.tmp"  || { echo 'Babel Processing Failed.' ;  rm "$OUT_FILE.tmp"; exit 1; }
+mv "$OUT_FILE.tmp" "$OUT_FILE"
+
+popd || { echo 'Could not return from primary directory.' ; exit 1; }

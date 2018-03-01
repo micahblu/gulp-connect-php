@@ -244,6 +244,10 @@ Default: `'false'`
 
 Enables debugging of the spawn call and its parameters.
 
+## Building
+
+This package comes with a NPM run-script command called `prepack`. This is intended to be run before the packaging and pushing to NPM, however it is also what builds the Node 4.X compatibility script `index-compat.js`. Without it the default `package.json` will not execute properly.
+
 ## License
 
 MIT © [Micah Blu](http://micahblu.net)
